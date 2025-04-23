@@ -34,16 +34,25 @@
     #useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
+  fonts.packages = with pkgs; [
+    inter
+    nerdfonts
+  ];
 
-  services.xserver.videoDrivers = [ "vmware" ];
-  virtualisation.vmware.guest.enable = true;
-  
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
+  nixpkgs.config.allowUnfree = true;
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware = {
+    graphics = {
+      enable = true;
+    };
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = false;
+      powerManagement.finegrained = false;
+      open = true;
+      nvidiaSettings = true;
+    };
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -60,19 +69,26 @@
   # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.bbrockway = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      tree
-    ];
+  programs.zsh.enable =  true;
+  users = {
+    defaultUserShell = pkgs.zsh;
+    users.bbrockway = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      packages = with pkgs; [
+        tree
+      ];
+    };
   };
 
   # programs.firefox.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  environment.pathsToLink = [ "/share/zsh" ];
   environment.systemPackages = with pkgs; [
+    firefox
     git
+    google-chrome
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
   ];
@@ -84,6 +100,7 @@
     enable = true;
     enableSSHSupport = true;
   };
+  security.polkit.enable = true;
 
   # List services that you want to enable:
 
@@ -119,6 +136,5 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
-
 }
 

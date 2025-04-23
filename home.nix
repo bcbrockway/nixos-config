@@ -1,11 +1,54 @@
 {
-  home.username = "bbrockway";
-  home.homeDirectory = "/home/bbrockway";
+  home = {
+    username = "bbrockway";
+    homeDirectory = "/home/bbrockway";
+    keyboard.layout = "uk";
+  };
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      window.padding.x = 7;
+      window.padding.y = 7;
+      font.size = 10;
+      selection.save_to_clipboard = true;
+      mouse.bindings = [{mouse = "Right"; action = "PasteSelection";}];
+      keyboard.bindings = [
+        {key = "Up"; mods = "Shift"; action = "ScrollLineUp";}
+        {key = "Down"; mods = "Shift"; action = "ScrollLineDown";}
+      ];
+    };
+  };
 
   programs.git = {
     enable = true;
     userName = "Bobby Brockway";
     userEmail = "bobby.brockway@gmail.com";
+  };
+ 
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    syntaxHighlighting.enable = true;
+    shellAliases = {
+      ll = "ls -l";
+    };
+    oh-my-zsh = {
+      enable = true;
+      plugins = ["git" "kubectl"];
+      theme = "robbyrussell";
+    };
+  };
+
+  services.gnome-keyring.enable = true;
+
+  wayland.windowManager.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    config = rec {
+      modifier = "Mod4";
+      terminal = "alacritty";
+    };
   };
   
   # This value determines the home Manager release that your
