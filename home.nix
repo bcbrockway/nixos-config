@@ -46,6 +46,7 @@
     enable = true;
     wrapperFeatures.gtk = true;
     config = rec {
+      input."*".xkb_layout = "gb";
       modifier = "Mod4";
       terminal = "alacritty";
     };
