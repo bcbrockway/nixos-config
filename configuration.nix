@@ -90,9 +90,16 @@
     firefox
     git
     google-chrome
+    nautilus
+    networkmanagerapplet
+    seahorse  # For managing keys and passwords in the gnome-keyring
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
   ];
+  programs.nautilus-open-any-terminal = {
+    enable = true;
+    terminal = "alacritty";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -102,6 +109,21 @@
     enableSSHSupport = true;
   };
   security.polkit.enable = true;
+
+  services.gnome.gnome-keyring.enable = true;
+
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    xwayland.enable = true;
+    extraOptions = ["--unsupported-gpu"];
+    extraPackages = with pkgs; [ brightnessctl foot grim swayidle swaylock wmenu ];
+    extraSessionCommands = ''
+      # vscode needs this to properly set gnome-keyring as its password store
+      # https://code.visualstudio.com/docs/configure/settings-sync#_linux
+      export DESKTOP_SESSION=gnome
+    '';
+  };
 
   # List services that you want to enable:
 

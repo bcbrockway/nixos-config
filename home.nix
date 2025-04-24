@@ -25,6 +25,10 @@
     userName = "Bobby Brockway";
     userEmail = "bobby.brockway@gmail.com";
   };
+
+  programs.vscode = {
+    enable = true;
+  };
  
   programs.zsh = {
     enable = true;
@@ -40,18 +44,8 @@
     };
   };
 
-  services.gnome-keyring.enable = true;
+  xdg.configFile."sway/config".source = ./dotfiles/sway/config;
 
-  wayland.windowManager.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-    config = rec {
-      input."*".xkb_layout = "gb";
-      modifier = "Mod4";
-      terminal = "alacritty";
-    };
-  };
-  
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new home Manager release introduces backwards
