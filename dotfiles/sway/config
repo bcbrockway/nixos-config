@@ -30,23 +30,29 @@ output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_19
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle configuration
-#
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -f -c 000000'
+
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
 input * xkb_layout "gb"
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
+
+### Floating Windows
+for_window [app_id="com.saivert.pwvucontrol"] floating enable
+for_window [app_id="wdisplays"] floating enable
+
+### Appearance
+font 'Ubuntu Nerd Font' 10
+for_window [app_id=".*"] border pixel 5
+gaps inner 7
+
+### Startup
+exec nm-applet
 
 ### Key bindings
 #
@@ -69,7 +75,7 @@ input * xkb_layout "gb"
     floating_modifier $mod normal
 
     # Reload the configuration file
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r reload
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
@@ -197,14 +203,25 @@ bindsym $mod+r mode "resize"
     bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
     bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
     # Special key to take a screenshot with grim
-    bindsym Print exec grim
+    bindsym Print exec flameshot gui
+#
+# My Bindings
+#
+bindsym $mod+Shift+c exec /home/bbrockway/.config/i3/start-code-workspace.sh
+bindsym $mod+Shift+f exec google-chrome-stable --app=https://mail.google.com/chat/u/0/#chat/welcome
+bindsym $mod+Shift+n exec google-chrome-stable --app=https://notion.so
+bindsym $mod+Shift+p exec google-chrome-stable --enable-features=NativeNotifications --user-data-dir=/home/bbrockway/.config/chromium-personal
+bindsym $mod+Shift+t exec google-chrome-stable --app=https://app.todoist.com
+bindsym $mod+Shift+w exec google-chrome-stable --enable-features=NativeNotifications
+bindsym $mod+Shift+x exec swaylock
+
 
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    position bottom
+    position top
 
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
