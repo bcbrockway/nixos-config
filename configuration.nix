@@ -35,10 +35,18 @@
   };
   services.xserver.xkb.layout = "gb";
 
-  fonts.packages = with pkgs; [
-    inter
-    nerdfonts
-  ];
+  fonts = {
+    fontconfig = {
+      defaultFonts = {
+        monospace = ["UbuntuMono Nerd Font"];
+        sansSerif = ["UbuntuSans Nerd Font"];
+        serif = ["Ubuntu Nerd Font"];
+      };
+    };
+    packages = with pkgs; [
+      nerdfonts
+    ];
+  };
 
   nixpkgs.config.allowUnfree = true;
   services.xserver.videoDrivers = ["nvidia"];
@@ -88,17 +96,31 @@
   environment.pathsToLink = [ "/share/zsh" ];
   environment.systemPackages = with pkgs; [
     firefox
+    font-manager
     git
     google-chrome
+    greetd.tuigreet  # Greeter for launching window managers / desktop environments
     nautilus
     networkmanagerapplet
+    pipewire  # Replacement for PulseAudio, ALSA and JACK. Also helps us to screen-share in Wayland.
+    pwvucontrol # pavucontrol replacement for Pipewire
     seahorse  # For managing keys and passwords in the gnome-keyring
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     wget
   ];
   programs.nautilus-open-any-terminal = {
     enable = true;
     terminal = "alacritty";
+  };
+
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        user = "greeter";
+      };
+    };
   };
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -117,7 +139,17 @@
     wrapperFeatures.gtk = true;
     xwayland.enable = true;
     extraOptions = ["--unsupported-gpu"];
-    extraPackages = with pkgs; [ brightnessctl foot grim swayidle swaylock wmenu ];
+    extraPackages = with pkgs; [
+      brightnessctl
+      clipman
+      flameshot
+      foot
+      kanshi  # autorandr replacement
+      swayidle
+      swaylock
+      wmenu
+      wdisplays
+    ];
     extraSessionCommands = ''
       # vscode needs this to properly set gnome-keyring as its password store
       # https://code.visualstudio.com/docs/configure/settings-sync#_linux
@@ -129,12 +161,21 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.flatpak.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
+
+  xdg = {
+    autostart.enable = true;
+    portal = {
+      enable = true;  
+      wlr.enable = true;
+    };
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -160,4 +201,3 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
 }
-
