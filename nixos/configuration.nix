@@ -1,14 +1,21 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ inputs, outputs, lib, config, pkgs, hostname, specialArgs, options, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware/${hostname}.nix
-    ];
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  hostname,
+  specialArgs,
+  options,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware/${hostname}.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -17,7 +24,7 @@
   networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -78,12 +85,12 @@
   # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  programs.zsh.enable =  true;
+  programs.zsh.enable = true;
   users = {
     defaultUserShell = pkgs.zsh;
     users.bbrockway = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+      extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
       packages = with pkgs; [
         tree
       ];
@@ -92,19 +99,19 @@
 
   # programs.firefox.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  environment.pathsToLink = [ "/share/zsh" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+  environment.pathsToLink = ["/share/zsh"];
   environment.systemPackages = with pkgs; [
     firefox
     font-manager
     git
     google-chrome
-    greetd.tuigreet  # Greeter for launching window managers / desktop environments
+    greetd.tuigreet # Greeter for launching window managers / desktop environments
     nautilus
     networkmanagerapplet
-    pipewire  # Replacement for PulseAudio, ALSA and JACK. Also helps us to screen-share in Wayland.
+    pipewire # Replacement for PulseAudio, ALSA and JACK. Also helps us to screen-share in Wayland.
     pwvucontrol # pavucontrol replacement for Pipewire
-    seahorse  # For managing keys and passwords in the gnome-keyring
+    seahorse # For managing keys and passwords in the gnome-keyring
     vim
     wget
   ];
@@ -144,7 +151,7 @@
       clipman
       flameshot
       foot
-      kanshi  # autorandr replacement
+      kanshi # autorandr replacement
       swayidle
       swaylock
       wmenu
@@ -172,7 +179,7 @@
   xdg = {
     autostart.enable = true;
     portal = {
-      enable = true;  
+      enable = true;
       wlr.enable = true;
     };
   };

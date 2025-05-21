@@ -1,5 +1,4 @@
-{ pkgs, ... }:{
-  
+{pkgs, ...}: {
   home = {
     username = "bbrockway";
     homeDirectory = "/home/bbrockway";
@@ -13,10 +12,23 @@
       window.padding.y = 7;
       font.size = 12;
       selection.save_to_clipboard = true;
-      mouse.bindings = [{mouse = "Right"; action = "PasteSelection";}];
+      mouse.bindings = [
+        {
+          mouse = "Right";
+          action = "PasteSelection";
+        }
+      ];
       keyboard.bindings = [
-        {key = "Up"; mods = "Shift"; action = "ScrollLineUp";}
-        {key = "Down"; mods = "Shift"; action = "ScrollLineDown";}
+        {
+          key = "Up";
+          mods = "Shift";
+          action = "ScrollLineUp";
+        }
+        {
+          key = "Down";
+          mods = "Shift";
+          action = "ScrollLineDown";
+        }
       ];
     };
   };
@@ -30,7 +42,7 @@
   programs.vscode = {
     enable = true;
   };
- 
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -44,7 +56,7 @@
       theme = "robbyrussell";
     };
   };
- 
+
   xdg.configFile."sway/config".source = ./dotfiles/sway/config;
 
   # This value determines the home Manager release that your
